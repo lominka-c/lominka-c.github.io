@@ -1,115 +1,143 @@
 import logging
 import httpx
+import firebase_admin
+from firebase_admin import credentials, messaging
 from fastapi import FastAPI
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from datetime import datetime
 
 # --- НАЛАШТУВАННЯ ---
 MY_DOMAIN = "https://lominka.tech"  # Твій домен для пінгування
-SMAKI_API_URL = "https://api.smaki.ua/v1/orders"  # Перевір реальний URL
-POLL_INTERVAL_SECONDS = 30  # Як часто перевіряти замовлення
-KEEP_ALIVE_MINUTES = 10     # Як часто "будити" сервер
+SMAKI_API_URL = "https://api.smaki.ua/v1/orders"  # Реальний API Смакі
+POLL_INTERVAL = 30  # секунд (як часто перевіряти замовлення)
 
-# Зберігаємо оброблені ID замовлень, щоб не було дублів
-# При перезавантаженні сервера на Render сет очиститься
+# --- ІНІЦІАЛІЗАЦІЯ FIREBASE ---
+# Файл service-account.json має лежати в тій же папці, що і цей скрипт
+try:
+    cred = credentials.Certificate("service-account.json")
+    firebase_admin.initialize_app(cred)
+    print("Firebase успішно ініціалізовано.")
+except Exception as e:
+    print(f"Помилка ініціалізації Firebase: {e}")
+
+app = FastAPI(title="Lominka Backend")
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger("delivery_service")
+
+# Пам'ять для ID замовлень (щоб не надсилати дублі)
 processed_orders = set()
 
-app = FastAPI(title="Lominka Delivery Backend")
+# --- ФУНКЦІЯ НАДСИЛАННЯ PUSH ---
 
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
+async def send_fcm_notification(order_data):
+    """Надсилає реальний Push-сповіщення у Flutter додаток"""
+    order_id = str(order_data.get('id', '0'))
+    address = order_data.get('delivery_address', 'Адреса не вказана')
+    total = str(order_data.get('total_price', '0'))
 
-# --- ЛОГІКА ПОВІДОМЛЕНЬ ---
+    # Створюємо об'єкт повідомлення для теми "couriers"
+    message = messaging.Message(
+        notification=messaging.Notification(
+            title=f"Нове замовлення #{order_id}",
+            body=f"Сума: {total} грн. Адреса: {address}",
+        ),
+        # Додаткові дані для обробки логіки всередині додатка
+        data={
+            "order_id": order_id,
+            "status": "new",
+        },
+        topic="couriers",
+    )
 
-async def send_notification(order):
-    """Надсилання сповіщення (сюди можна додати Telegram або Firebase)"""
-    order_id = order.get('id')
-    total = order.get('total_price', '0')
-    address = order.get('delivery_address', 'Не вказано')
-    
-    message = f"🚀 НОВЕ ЗАМОВЛЕННЯ #{order_id}\n💰 Сума: {total} грн\n📍 Адреса: {address}"
-    logger.info(f"NOTIFICATION: {message}")
-    
-    # Приклад для Telegram (розкоментуй, якщо треба):
-    # async with httpx.AsyncClient() as client:
-    #     await client.post(f"https://api.telegram.org/bot{TOKEN}/sendMessage", 
-    #                       json={"chat_id": CHAT_ID, "text": message})
+    try:
+        response = messaging.send(message)
+        logger.info(f"✅ Push надіслано успішно. ID: {response}")
+    except Exception as e:
+        logger.error(f"❌ Помилка надсилання Push: {e}")
 
-# --- ФОНОВІ ЗАВДАННЯ ---
+# --- ФОНОВІ ЗАДАЧІ ---
 
 async def keep_alive_task():
-    """Робить зовнішній запит на свій домен, щоб Render не заснув"""
+    """Зовнішній запит на свій домен, щоб Render не вимкнув сервер"""
     async with httpx.AsyncClient() as client:
         try:
-            response = await client.get(f"{MY_DOMAIN}/health")
-            logger.info(f"[{datetime.now()}] Self-poke via {MY_DOMAIN}: {response.status_code}")
+            resp = await client.get(f"{MY_DOMAIN}/health")
+            logger.info(f"💤 Anti-sleep check: {resp.status_code}")
         except Exception as e:
             logger.error(f"Keep-alive error: {e}")
 
 async def parse_orders_task():
-    """Парсинг API Smaki та порівняння замовлень"""
+    """Парсинг API замовлень та порівняння ID"""
     global processed_orders
-    logger.info(f"[{datetime.now()}] Checking for orders...")
+    logger.info(f"🔎 Перевірка API Смакі... {datetime.now().strftime('%H:%M:%S')}")
     
     async with httpx.AsyncClient() as client:
         try:
-            # Додай headers={"Authorization": "Bearer ..."}, якщо Smaki вимагає токен
+            # Якщо потрібна авторизація, додай headers={"Authorization": "Bearer ..."}
             response = await client.get(SMAKI_API_URL, timeout=10.0)
             
             if response.status_code == 200:
                 data = response.json()
-                # Адаптуємо під структуру Smaki (список замовлень)
+                # Адаптація під структуру: список або об'єкт з ключем 'orders'
                 orders = data.get('orders', []) if isinstance(data, dict) else data
 
                 if not orders:
                     return
 
-                # Перевіряємо замовлення (припускаємо, що нові на початку списку)
-                for order in orders[:5]:  # Дивимось лише на останні 5 для швидкості
-                    order_id = order.get('id')
+                for order in orders[:3]: # Перевіряємо тільки найсвіжіші
+                    o_id = order.get('id')
                     status = order.get('status')
 
-                    # Якщо ID новий та статус підходить для кур'єра
-                    if order_id not in processed_orders:
-                        if status in ['new', 'confirmed', 'preparing']:
-                            await send_notification(order)
-                            processed_orders.add(order_id)
+                    if o_id not in processed_orders:
+                        # Тільки якщо замовлення актуальне для кур'єра
+                        if status in ['new', 'confirmed', 'preparing', 'cooking']:
+                            await send_fcm_notification(order)
+                            processed_orders.add(o_id)
                 
-                # Обмежуємо розмір сету, щоб не переповнювати пам'ять (останні 100 замовлень)
+                # Обмежуємо розмір сету
                 if len(processed_orders) > 100:
                     processed_orders = set(list(processed_orders)[-100:])
             else:
-                logger.error(f"API Smaki error {response.status_code}")
+                logger.error(f"API Smaki помилка: {response.status_code}")
         except Exception as e:
-            logger.error(f"Order parsing failed: {e}")
+            logger.error(f"Помилка з'єднання з API: {e}")
 
-# --- ЗАПУСК ПЛАНУВАЛЬНИКА ---
+# --- ПЛАНУВАЛЬНИК ---
 
 @app.on_event("startup")
 async def start_scheduler():
     scheduler = AsyncIOScheduler()
-    
-    # Завдання 1: Пінгуємо домен
-    scheduler.add_job(keep_alive_task, 'interval', minutes=KEEP_ALIVE_MINUTES)
-    
-    # Завдання 2: Перевірка замовлень
-    scheduler.add_job(parse_orders_task, 'interval', seconds=POLL_INTERVAL_SECONDS)
+    # "Будильник" кожні 10 хвилин
+    scheduler.add_job(keep_alive_task, 'interval', minutes=10)
+    # Перевірка замовлень кожні 30 секунд
+    scheduler.add_job(parse_orders_task, 'interval', seconds=POLL_INTERVAL)
     
     scheduler.start()
-    logger.info("Scheduler active: keep-alive (10m) and parser (30s)")
+    logger.info("✅ Планувальник запущено.")
 
 # --- ЕНДПОІНТИ ---
 
 @app.get("/health")
-async def health_check():
-    return {"status": "online", "timestamp": datetime.now()}
+def health():
+    return {"status": "ok", "time": datetime.now().isoformat()}
+
+@app.get("/test")
+async def manual_test():
+    """Ендпоінт для ручного тесту пуш-повідомлення"""
+    test_order = {
+        "id": 777,
+        "total_price": "500",
+        "delivery_address": "Львів, Пл. Ринок 1",
+        "status": "new"
+    }
+    await send_fcm_notification(test_order)
+    return {"message": "Test push sent to Firebase topic 'couriers'"}
 
 @app.get("/")
-async def root():
-    return {"message": "Lominka Delivery Backend is running"}
+def home():
+    return {"info": "Lominka Delivery Backend", "active": True}
 
 if __name__ == "__main__":
     import uvicorn
-    # На Render порт береться зі змінної середовища $PORT
     uvicorn.run(app, host="0.0.0.0", port=8000)
 

@@ -2,4 +2,5 @@ fastapi
 uvicorn
 httpx
 apscheduler
+firebase-admin
 
