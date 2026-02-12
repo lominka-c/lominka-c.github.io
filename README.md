@@ -1,1 +1,0 @@
-# lominka-c.github.io
