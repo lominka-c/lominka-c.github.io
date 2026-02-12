@@ -8,148 +8,161 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;800&display=swap" rel="stylesheet">
     <style>
-        :root { --accent: #38bdf8; --accent-dark: #818cf8; }
-        body { background-color: #020617; color: #f1f5f9; font-family: 'Plus Jakarta Sans', sans-serif; overflow-x: hidden; }
-        
-        .reveal { opacity: 0; transform: translateY(15px); transition: all 0.7s cubic-bezier(0.4, 0, 0.2, 1); }
+        :root { --accent: #38bdf8; }
+        body { background-color: #020617; color: #f1f5f9; font-family: 'Plus Jakarta Sans', sans-serif; }
+        .reveal { opacity: 0; transform: translateY(15px); transition: all 0.7s ease-out; }
         .reveal.active { opacity: 1; transform: translateY(0); }
-        
         .glass { background: rgba(15, 23, 42, 0.4); backdrop-filter: blur(8px); border: 1px solid rgba(255, 255, 255, 0.08); }
-        .gradient-text { background: linear-gradient(90deg, var(--accent), var(--accent-dark)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        
-        .blob { position: absolute; width: 400px; height: 400px; background: radial-gradient(circle, rgba(56, 189, 248, 0.08) 0%, transparent 70%); z-index: -1; animation: pulse 10s infinite alternate; }
-        @keyframes pulse { from { transform: scale(1); opacity: 0.1; } to { transform: scale(1.1); opacity: 0.15; } }
-        
-        .skill-card:hover { border-color: rgba(56, 189, 248, 0.3); transform: translateY(-3px); background: rgba(15, 23, 42, 0.6); }
-        transition { transition: all 0.3s ease; }
+        .gradient-text { background: linear-gradient(90deg, #38bdf8, #818cf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .skill-tag { font-size: 10px; background: rgba(56, 189, 248, 0.1); color: #7dd3fc; padding: 2px 8px; rounded: 4px; border: 1px solid rgba(56, 189, 248, 0.2); }
     </style>
 </head>
 <body class="selection:bg-sky-500/30 text-[15px]">
 
-    <div class="blob top-[-50px] left-[-50px]"></div>
-    <div class="blob bottom-[15%] right-[-50px]" style="animation-delay: -5s;"></div>
-
-    <section class="min-h-[90vh] flex flex-col justify-center items-center px-6 text-center">
+    <section class="min-h-[85vh] flex flex-col justify-center items-center px-6 text-center">
         <div class="reveal">
-            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-sky-500/10 bg-sky-500/5 text-sky-400 text-[11px] font-bold mb-6 tracking-[0.2em] uppercase">
-                <span class="relative flex h-1.5 w-1.5">
-                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75"></span>
-                    <span class="relative inline-flex rounded-full h-1.5 w-1.5 bg-sky-500"></span>
-                </span>
-                Developer & Engineer
-            </div>
-            <h1 class="text-5xl md:text-6xl font-extrabold mb-4 tracking-tight">
+            <h1 class="text-6xl md:text-7xl font-extrabold mb-4 tracking-tight">
                 Lominka<span class="gradient-text">.dev</span>
             </h1>
-            <p class="text-base md:text-lg text-slate-400 max-w-xl mx-auto mb-10 leading-relaxed font-light">
-                Мені <span id="age" class="text-white font-semibold"></span>. Живу у <span class="text-white">Львові</span>. <br>
-                Пишу код на Python, Dart, C++ та створюю інженерні прилади.
+            <p class="text-base md:text-xl text-slate-400 max-w-xl mx-auto mb-10 leading-relaxed font-light">
+                Мені <span id="age" class="text-white font-semibold"></span> років. Живу у Львові. <br>
+                <span class="text-slate-400">Вивчаю програмування та створюю проєкти на перетині софту та заліза.</span>
             </p>
             <div class="flex flex-wrap justify-center gap-4">
-                <a href="https://t.me/lominkas" target="_blank" class="glass px-7 py-3 rounded-xl font-semibold hover:bg-slate-800/40 transition flex items-center gap-2 group text-sm">
-                    <i class="fa-brands fa-telegram text-lg group-hover:scale-110 transition text-sky-400"></i> 
-                    <span>Telegram Блог</span>
+                <a href="https://github.com/lominka-c" target="_blank" class="glass px-7 py-3 rounded-xl font-semibold hover:bg-slate-800/40 transition flex items-center gap-2 group text-sm">
+                    <i class="fa-brands fa-github text-lg"></i> GitHub
                 </a>
-                <a href="mailto:lominka.company@gmail.com" class="bg-white text-slate-950 px-7 py-3 rounded-xl font-semibold hover:bg-sky-50 transition flex items-center gap-2 text-sm">
-                    <i class="fa-solid fa-envelope"></i> Email
+                <a href="https://t.me/lominkas" target="_blank" class="bg-sky-500 hover:bg-sky-600 text-white px-7 py-3 rounded-xl font-semibold transition flex items-center gap-2 text-sm shadow-lg shadow-sky-500/20">
+                    <i class="fa-brands fa-telegram text-lg"></i> Мій Блог
                 </a>
             </div>
         </div>
     </section>
 
-    <section class="py-20 px-6 max-w-5xl mx-auto">
-        <div class="grid md:grid-cols-2 gap-12 items-start">
-            <div class="reveal">
-                <h2 class="text-2xl font-bold mb-6 flex items-center gap-2">
-                    <span class="w-8 h-[1px] bg-sky-500"></span> Про мене
+    <section class="py-10 px-6 max-w-5xl mx-auto">
+        <div class="grid md:grid-cols-2 gap-12">
+            
+            <div class="reveal space-y-10">
+                <div>
+                    <h2 class="text-xl font-bold mb-4 flex items-center gap-2">
+                        <i class="fa-solid fa-user text-sky-500 text-sm"></i> Про мене
+                    </h2>
+                    <p class="text-slate-400 leading-relaxed font-light">
+                        Навчаюся на розробника, поєдную теорію з практичними експериментами. 
+                        Цікавлюся архітектурою систем та використанням <b>ШІ</b> для автоматизації процесів. 
+                        Завжди відкритий до нових ідей та технічних викликів.
+                    </p>
+                </div>
+
+                <div>
+                    <h2 class="text-xl font-bold mb-4 flex items-center gap-2">
+                        <i class="fa-solid fa-laptop-code text-sky-500 text-sm"></i> Hardware Setup
+                    </h2>
+                    <ul class="space-y-4 text-slate-400 text-sm">
+                        <li class="flex items-center gap-3"><i class="fa-solid fa-laptop text-sky-400"></i> Lenovo LOQ (Main Station)</li>
+                        <li class="flex items-center gap-3"><i class="fa-solid fa-print text-sky-400"></i> Ender 3 V3 SE (3D Printing)</li>
+                        <li class="flex items-center gap-3"><i class="fa-solid fa-microchip text-sky-400"></i> ESP32 / Arduino / Sensors</li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h2 class="text-xl font-bold mb-4 flex items-center gap-2">
+                        <i class="fa-solid fa-comments text-sky-500 text-sm"></i> На зв'язку
+                    </h2>
+                    <p class="text-slate-400 leading-relaxed font-light text-sm">
+                        Завжди готовий відповісти на питання або обговорити щось цікаве. 
+                        Найшвидше мене можна знайти в <b>Telegram</b> — я постійно на зв'язку, тому пишіть, не соромтеся.
+                    </p>
+                </div>
+            </div>
+
+            <div class="reveal space-y-6">
+                <h2 class="text-xl font-bold mb-4 flex items-center gap-2">
+                    <i class="fa-solid fa-terminal text-sky-500 text-sm"></i> Стек технологій
                 </h2>
-                <div class="space-y-5 text-slate-400 font-light leading-relaxed">
-                    <p>Наразі я навчаюся на <span class="text-white font-medium italic underline decoration-sky-500/30">інженерії програмного забезпечення</span>, поєднуючи академічну базу з практичними експериментами.</p>
-                    <p>Мій головний інструмент сьогодні — <span class="text-sky-400">Штучний Інтелект</span>. Я інтегрую LLM у свої розробки для автоматизації складних задач та створення розумних ботів.</p>
-                    
-                    <div class="pt-6 border-t border-slate-800/50">
-                        <h4 class="text-white font-semibold mb-4 text-sm uppercase tracking-wider">Залізо та Maker-культура:</h4>
-                        <ul class="space-y-3">
-                            <li class="flex items-center gap-3 text-sm"><i class="fa-solid fa-microchip text-sky-500 w-4"></i> Розробка приладів на ESP32 та Arduino</li>
-                            <li class="flex items-center gap-3 text-sm"><i class="fa-solid fa-cube text-indigo-500 w-4"></i> 3D-друк корпусів на Ender 3 V3 SE</li>
-                            <li class="flex items-center gap-3 text-sm"><i class="fa-solid fa-bolt text-yellow-500 w-4"></i> Модифікація та ремонт електробайків</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <div class="reveal space-y-3">
-                <h3 class="text-sm font-bold text-slate-500 mb-6 uppercase tracking-widest">Технології</h3>
                 
-                <div class="glass p-4 rounded-xl skill-card transition flex items-center gap-4">
-                    <i class="fa-brands fa-python text-2xl text-yellow-400/80"></i>
-                    <div>
-                        <h4 class="font-bold text-sm">Python</h4>
-                        <p class="text-[11px] text-slate-500">FastAPI, Aiogram, Pyrogram, OpenCV</p>
+                <div class="grid grid-cols-1 gap-4">
+                    <div class="glass p-5 rounded-2xl">
+                        <div class="flex items-center gap-4 mb-3">
+                            <i class="fa-brands fa-python text-yellow-400 text-2xl"></i>
+                            <span class="font-bold">Python Development</span>
+                        </div>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="skill-tag text-white">FastAPI</span>
+                            <span class="skill-tag text-white">Aiogram</span>
+                            <span class="skill-tag text-white">Pyrogram</span>
+                            <span class="skill-tag text-white">OpenCV</span>
+                        </div>
                     </div>
-                </div>
 
-                <div class="glass p-4 rounded-xl skill-card transition flex items-center gap-4">
-                    <i class="fa-solid fa-bolt text-2xl text-sky-400/80"></i>
-                    <div>
-                        <h4 class="font-bold text-sm">Dart & Flutter</h4>
-                        <p class="text-[11px] text-slate-500">Кросплатформена мобільна розробка</p>
+                    <div class="glass p-5 rounded-2xl">
+                        <div class="flex items-center gap-4 mb-3 text-white text-white text-white text-white">
+                            <i class="fa-solid fa-bolt text-sky-400 text-2xl"></i>
+                            <span class="font-bold">Dart & Flutter</span>
+                        </div>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="skill-tag text-white">Mobile Apps</span>
+                            <span class="skill-tag text-white">API Integration</span>
+                            <span class="skill-tag text-white">Firebase</span>
+                        </div>
                     </div>
-                </div>
 
-                <div class="glass p-4 rounded-xl skill-card transition flex items-center gap-4">
-                    <i class="fa-solid fa-code text-2xl text-blue-500/80"></i>
-                    <div>
-                        <h4 class="font-bold text-sm">C++ / Embedded</h4>
-                        <p class="text-[11px] text-slate-500">Програмування мікроконтролерів</p>
+                    <div class="glass p-5 rounded-2xl">
+                        <div class="flex items-center gap-4 mb-3">
+                            <i class="fa-solid fa-code text-blue-500 text-2xl text-white text-white text-white"></i>
+                            <span class="font-bold">C++ & Engineering</span>
+                        </div>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="skill-tag text-white text-white">Arduino IDE</span>
+                            <span class="skill-tag text-white">ESP32</span>
+                            <span class="skill-tag text-white text-white">Embedded Systems</span>
+                        </div>
                     </div>
-                </div>
 
-                <div class="glass p-4 rounded-xl skill-card transition flex items-center gap-4">
-                    <i class="fa-solid fa-brain text-2xl text-purple-500/80"></i>
-                    <div>
-                        <h4 class="font-bold text-sm">AI Integration</h4>
-                        <p class="text-[11px] text-slate-500">LangChain, OpenAI API, Prompting</p>
+                    <div class="glass p-5 rounded-2xl">
+                        <div class="flex items-center gap-4 mb-3 text-white text-white text-white text-white text-white">
+                            <i class="fa-solid fa-screwdriver-wrench text-slate-400 text-2xl"></i>
+                            <span class="font-bold">Tools & Others</span>
+                        </div>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="skill-tag text-white">Git / GitHub</span>
+                            <span class="skill-tag text-white text-white">SQL (PostgreSQL)</span>
+                            <span class="skill-tag text-white text-white">REST API</span>
+                            <span class="skill-tag text-white text-white">Linux</span>
+                        </div>
                     </div>
                 </div>
             </div>
+
         </div>
     </section>
 
-    <footer class="py-16 border-t border-slate-900/50 text-center">
-        <div class="reveal">
-            <div class="flex justify-center gap-8 mb-8">
-                <a href="https://t.me/lominkas" class="text-slate-500 hover:text-sky-400 transition"><i class="fa-brands fa-telegram text-xl"></i></a>
-                <a href="mailto:lominka.company@gmail.com" class="text-slate-500 hover:text-sky-400 transition"><i class="fa-solid fa-envelope text-xl"></i></a>
-                <span class="opacity-10 cursor-not-allowed"><i class="fa-brands fa-github text-xl"></i></span>
+    <footer class="py-20 text-center text-slate-600 border-t border-slate-900/50">
+        <div class="reveal px-6 text-white text-white">
+            <div class="flex justify-center gap-8 mb-6 text-white text-white text-white text-white text-white">
+                <a href="https://github.com/lominka-c" target="_blank" class="hover:text-white transition"><i class="fa-brands fa-github text-xl"></i></a>
+                <a href="https://t.me/lominkas" target="_blank" class="hover:text-sky-400 transition"><i class="fa-brands fa-telegram text-xl"></i></a>
+                <a href="mailto:lominka.company@gmail.com" class="hover:text-white transition"><i class="fa-solid fa-envelope text-xl"></i></a>
             </div>
-            <p class="text-[10px] text-slate-600 uppercase tracking-[0.4em]">
-                © <span id="year"></span> Lominka | Lviv, UA
-            </p>
+            <p class="text-[10px] uppercase tracking-[0.4em] mb-2 text-white">Lviv • Ukraine</p>
+            <p class="text-[9px] opacity-40">© <span id="year"></span> Lominka</p>
+            <p class="text-[8px] opacity-20 mt-10 tracking-widest font-light">Сайт згенеровано за допомогою ШІ</p>
         </div>
     </footer>
 
     <script>
-        // Reveal animation
         const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) entry.target.classList.add('active');
-            });
+            entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('active'); });
         }, { threshold: 0.1 });
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-        // Age calculation (Born Feb 7, 2008)
-        function updateAge() {
-            const birth = new Date('2008-02-07');
-            const now = new Date();
-            let age = now.getFullYear() - birth.getFullYear();
-            const m = now.getMonth() - birth.getMonth();
-            if (m < 0 || (m === 0 && now.getDate() < birth.getDate())) age--;
-            document.getElementById('age').innerText = age;
-        }
-
-        updateAge();
-        document.getElementById('year').innerText = new Date().getFullYear();
+        // Age logic
+        const bD = 7, bM = 1, bY = 2008;
+        const n = new Date();
+        let a = n.getFullYear() - bY;
+        if (n.getMonth() < bM || (n.getMonth() === bM && n.getDate() < bD)) a--;
+        document.getElementById('age').innerText = a;
+        document.getElementById('year').innerText = n.getFullYear();
     </script>
 </body>
 </html>
