@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="uk" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lominka | Dev & Maker</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root { --accent: #38bdf8; --accent-dark: #818cf8; }
+        body { background-color: #020617; color: #f1f5f9; font-family: 'Plus Jakarta Sans', sans-serif; overflow-x: hidden; }
+        
+        .reveal { opacity: 0; transform: translateY(15px); transition: all 0.7s cubic-bezier(0.4, 0, 0.2, 1); }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+        
+        .glass { background: rgba(15, 23, 42, 0.4); backdrop-filter: blur(8px); border: 1px solid rgba(255, 255, 255, 0.08); }
+        .gradient-text { background: linear-gradient(90deg, var(--accent), var(--accent-dark)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        
+        .blob { position: absolute; width: 400px; height: 400px; background: radial-gradient(circle, rgba(56, 189, 248, 0.08) 0%, transparent 70%); z-index: -1; animation: pulse 10s infinite alternate; }
+        @keyframes pulse { from { transform: scale(1); opacity: 0.1; } to { transform: scale(1.1); opacity: 0.15; } }
+        
+        .skill-card:hover { border-color: rgba(56, 189, 248, 0.3); transform: translateY(-3px); background: rgba(15, 23, 42, 0.6); }
+        transition { transition: all 0.3s ease; }
+    </style>
+</head>
+<body class="selection:bg-sky-500/30 text-[15px]">
+
+    <div class="blob top-[-50px] left-[-50px]"></div>
+    <div class="blob bottom-[15%] right-[-50px]" style="animation-delay: -5s;"></div>
+
+    <section class="min-h-[90vh] flex flex-col justify-center items-center px-6 text-center">
+        <div class="reveal">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-sky-500/10 bg-sky-500/5 text-sky-400 text-[11px] font-bold mb-6 tracking-[0.2em] uppercase">
+                <span class="relative flex h-1.5 w-1.5">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-1.5 w-1.5 bg-sky-500"></span>
+                </span>
+                Developer & Engineer
+            </div>
+            <h1 class="text-5xl md:text-6xl font-extrabold mb-4 tracking-tight">
+                Lominka<span class="gradient-text">.dev</span>
+            </h1>
+            <p class="text-base md:text-lg text-slate-400 max-w-xl mx-auto mb-10 leading-relaxed font-light">
+                Мені <span id="age" class="text-white font-semibold"></span>. Живу у <span class="text-white">Львові</span>. <br>
+                Пишу код на Python, Dart, C++ та створюю інженерні прилади.
+            </p>
+            <div class="flex flex-wrap justify-center gap-4">
+                <a href="https://t.me/lominkas" target="_blank" class="glass px-7 py-3 rounded-xl font-semibold hover:bg-slate-800/40 transition flex items-center gap-2 group text-sm">
+                    <i class="fa-brands fa-telegram text-lg group-hover:scale-110 transition text-sky-400"></i> 
+                    <span>Telegram Блог</span>
+                </a>
+                <a href="mailto:lominka.company@gmail.com" class="bg-white text-slate-950 px-7 py-3 rounded-xl font-semibold hover:bg-sky-50 transition flex items-center gap-2 text-sm">
+                    <i class="fa-solid fa-envelope"></i> Email
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-20 px-6 max-w-5xl mx-auto">
+        <div class="grid md:grid-cols-2 gap-12 items-start">
+            <div class="reveal">
+                <h2 class="text-2xl font-bold mb-6 flex items-center gap-2">
+                    <span class="w-8 h-[1px] bg-sky-500"></span> Про мене
+                </h2>
+                <div class="space-y-5 text-slate-400 font-light leading-relaxed">
+                    <p>Наразі я навчаюся на <span class="text-white font-medium italic underline decoration-sky-500/30">інженерії програмного забезпечення</span>, поєднуючи академічну базу з практичними експериментами.</p>
+                    <p>Мій головний інструмент сьогодні — <span class="text-sky-400">Штучний Інтелект</span>. Я інтегрую LLM у свої розробки для автоматизації складних задач та створення розумних ботів.</p>
+                    
+                    <div class="pt-6 border-t border-slate-800/50">
+                        <h4 class="text-white font-semibold mb-4 text-sm uppercase tracking-wider">Залізо та Maker-культура:</h4>
+                        <ul class="space-y-3">
+                            <li class="flex items-center gap-3 text-sm"><i class="fa-solid fa-microchip text-sky-500 w-4"></i> Розробка приладів на ESP32 та Arduino</li>
+                            <li class="flex items-center gap-3 text-sm"><i class="fa-solid fa-cube text-indigo-500 w-4"></i> 3D-друк корпусів на Ender 3 V3 SE</li>
+                            <li class="flex items-center gap-3 text-sm"><i class="fa-solid fa-bolt text-yellow-500 w-4"></i> Модифікація та ремонт електробайків</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="reveal space-y-3">
+                <h3 class="text-sm font-bold text-slate-500 mb-6 uppercase tracking-widest">Технології</h3>
+                
+                <div class="glass p-4 rounded-xl skill-card transition flex items-center gap-4">
+                    <i class="fa-brands fa-python text-2xl text-yellow-400/80"></i>
+                    <div>
+                        <h4 class="font-bold text-sm">Python</h4>
+                        <p class="text-[11px] text-slate-500">FastAPI, Aiogram, Pyrogram, OpenCV</p>
+                    </div>
+                </div>
+
+                <div class="glass p-4 rounded-xl skill-card transition flex items-center gap-4">
+                    <i class="fa-solid fa-bolt text-2xl text-sky-400/80"></i>
+                    <div>
+                        <h4 class="font-bold text-sm">Dart & Flutter</h4>
+                        <p class="text-[11px] text-slate-500">Кросплатформена мобільна розробка</p>
+                    </div>
+                </div>
+
+                <div class="glass p-4 rounded-xl skill-card transition flex items-center gap-4">
+                    <i class="fa-solid fa-code text-2xl text-blue-500/80"></i>
+                    <div>
+                        <h4 class="font-bold text-sm">C++ / Embedded</h4>
+                        <p class="text-[11px] text-slate-500">Програмування мікроконтролерів</p>
+                    </div>
+                </div>
+
+                <div class="glass p-4 rounded-xl skill-card transition flex items-center gap-4">
+                    <i class="fa-solid fa-brain text-2xl text-purple-500/80"></i>
+                    <div>
+                        <h4 class="font-bold text-sm">AI Integration</h4>
+                        <p class="text-[11px] text-slate-500">LangChain, OpenAI API, Prompting</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="py-16 border-t border-slate-900/50 text-center">
+        <div class="reveal">
+            <div class="flex justify-center gap-8 mb-8">
+                <a href="https://t.me/lominkas" class="text-slate-500 hover:text-sky-400 transition"><i class="fa-brands fa-telegram text-xl"></i></a>
+                <a href="mailto:lominka.company@gmail.com" class="text-slate-500 hover:text-sky-400 transition"><i class="fa-solid fa-envelope text-xl"></i></a>
+                <span class="opacity-10 cursor-not-allowed"><i class="fa-brands fa-github text-xl"></i></span>
+            </div>
+            <p class="text-[10px] text-slate-600 uppercase tracking-[0.4em]">
+                © <span id="year"></span> Lominka | Lviv, UA
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // Reveal animation
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('active');
+            });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+        // Age calculation (Born Feb 7, 2008)
+        function updateAge() {
+            const birth = new Date('2008-02-07');
+            const now = new Date();
+            let age = now.getFullYear() - birth.getFullYear();
+            const m = now.getMonth() - birth.getMonth();
+            if (m < 0 || (m === 0 && now.getDate() < birth.getDate())) age--;
+            document.getElementById('age').innerText = age;
+        }
+
+        updateAge();
+        document.getElementById('year').innerText = new Date().getFullYear();
+    </script>
+</body>
+</html>
+
