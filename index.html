@@ -1,191 +1,296 @@
 <!DOCTYPE html>
-<html lang="uk" class="scroll-smooth overflow-x-hidden">
+<html lang="uk" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lominka | Dev & Maker</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Lominka | IDE Environment</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;800&display=swap" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
-        :root { --accent: #f59e0b; }
-        body { background-color: #050507; color: #f1f5f9; font-family: 'Plus Jakarta Sans', sans-serif; overflow-x: hidden; margin: 0; }
-        
-        .reveal { opacity: 0; transform: translateY(15px); transition: all 0.7s ease-out; }
-        .reveal.active { opacity: 1; transform: translateY(0); }
-        
-        .bg-layer {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
-            background-image: radial-gradient(rgba(245, 158, 11, 0.05) 1px, transparent 1px);
-            background-size: 32px 32px;
+        :root {
+            --bg-core: #09090b; 
+            --accent-main: #f472b6; 
+            --accent-light: #fbcfe8; 
         }
         
-        .blob {
-            position: fixed; width: 600px; height: 600px;
-            background: radial-gradient(circle, rgba(245, 158, 11, 0.08) 0%, transparent 70%);
-            filter: blur(80px); border-radius: 50%; z-index: -1;
-            animation: move 25s infinite alternate ease-in-out;
-        }
-        @keyframes move {
-            from { transform: translate(-15%, -15%); }
-            to { transform: translate(15%, 15%); }
+        body { 
+            background-color: var(--bg-core);
+            color: #e2e8f0;
+            font-family: 'Nunito', sans-serif;
+            background-image: radial-gradient(circle at 50% 0%, rgba(244, 114, 182, 0.05) 0%, transparent 60%);
+            min-height: 100vh;
+            overflow-x: hidden;
         }
 
-        .glass { 
-            background: rgba(15, 15, 20, 0.7); 
-            backdrop-filter: blur(12px); 
-            border: 1px solid rgba(245, 158, 11, 0.15); 
+        .font-mono { font-family: 'Fira Code', monospace; }
+
+        .pink-gradient-text {
+            background: linear-gradient(to right, var(--accent-main), var(--accent-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
+
+        @keyframes slowPing {
+            0% { transform: scale(1); opacity: 1; }
+            75%, 100% { transform: scale(2.5); opacity: 0; }
+        }
+        .animate-slow-ping { animation: slowPing 3s cubic-bezier(0, 0, 0.2, 1) infinite; }
+
+        .typewriter-container { display: inline-flex; align-items: center; height: 32px; }
+        .blinking-cursor { 
+            color: var(--accent-main); font-weight: 800; margin-left: 2px;
+            animation: blink 1s step-end infinite; 
+        }
+        @keyframes blink { 50% { opacity: 0; } }
+
+        .cyber-card {
+            background: rgba(20, 20, 24, 0.6);
+            border: 1px solid rgba(244, 114, 182, 0.1);
+            backdrop-filter: blur(12px);
+            border-radius: 16px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+
+        .cyber-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(244, 114, 182, 0.3);
+            box-shadow: 0 10px 30px -15px rgba(244, 114, 182, 0.15);
+        }
+
+        .code-editor {
+            background-color: #050505;
+            border: 1px solid rgba(244, 114, 182, 0.2);
+            border-radius: 12px;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.8);
+        }
+
+        .reveal { 
+            opacity: 0; 
+            transform: translateY(30px); 
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out; 
+        }
+        .reveal.active { 
+            opacity: 1; 
+            transform: translateY(0); 
+        }
+
+        .tech-pill {
+            font-size: 0.7rem; font-family: 'Fira Code', monospace;
+            background: rgba(244, 114, 182, 0.05); 
+            border: 1px solid rgba(244, 114, 182, 0.15);
+            padding: 4px 10px; border-radius: 6px; color: var(--accent-light);
+        }
+
+        .cpp-keyword { color: #f472b6; font-weight: 600; }
+        .cpp-type { color: #fbcfe8; } 
+        .cpp-string { color: #ffffff; } 
+
+        /* БАЗОВИЙ ТОСТ */
+        .toast-msg {
+            position: fixed; 
+            background: #09090b; 
+            border: 1px solid var(--accent-main);
+            color: #fff; 
+            padding: 12px 20px; 
+            border-radius: 12px;
+            font-family: 'Fira Code', monospace; 
+            font-size: 13px;
+            box-shadow: 0 0 30px rgba(244, 114, 182, 0.3);
+            transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 9999; 
+            display: flex; 
+            align-items: center; 
+            gap: 12px;
+            opacity: 0; 
+            pointer-events: none;
+        }
+
+        /* РОБОТ (НИЗ ЦЕНТР) */
+        .toast-bottom { bottom: -50px; left: 50%; transform: translateX(-50%); }
+        .toast-bottom.show { bottom: 80px; opacity: 1; pointer-events: auto; }
+
+        /* КОТИК (ВЕРХ ПРАВО) */
+        .toast-top-right { top: 20px; right: -300px; }
+        .toast-top-right.show { right: 20px; opacity: 1; pointer-events: auto; }
         
-        .gradient-text { 
-            background: linear-gradient(135deg, #f59e0b, #fbbf24); 
-            -webkit-background-clip: text; 
-            -webkit-text-fill-color: transparent; 
-        }
-
-        .skill-tag { 
-            font-size: 10px; background: rgba(245, 158, 11, 0.05); color: #fcd34d; 
-            padding: 2px 8px; border-radius: 4px; border: 1px solid rgba(245, 158, 11, 0.2); 
-            font-weight: 600; text-transform: uppercase; letter-spacing: 0.025em;
-        }
-
-        /* Стиль для верхнього тексту (superscript) */
-        .sup-tech {
-            font-size: 9px;
-            color: #78716c;
-            vertical-align: super;
-            margin-left: 4px;
-            text-transform: uppercase;
-            font-weight: 500;
-            letter-spacing: 0.05em;
-        }
-
-        i { color: var(--accent) !important; }
-        .main-title { font-size: clamp(3rem, 10vw, 5.5rem); line-height: 1.1; }
+        #kaomoji, #robot-hint { transition: all 0.3s ease; cursor: pointer; display: inline-block; }
+        #robot-hint.poked { color: var(--accent-main); opacity: 1; text-shadow: 0 0 10px var(--accent-main); }
     </style>
 </head>
-<body class="selection:bg-amber-500/30 text-[15px]">
+<body class="antialiased selection:bg-pink-500/30 selection:text-white">
 
-    <div class="bg-layer"></div>
-    <div class="blob" style="top: -150px; left: -150px;"></div>
-    <div class="blob" style="bottom: -150px; right: -150px; animation-delay: -7s; background: radial-gradient(circle, rgba(120, 50, 10, 0.06) 0%, transparent 70%);"></div>
-
-    <section class="min-h-[85vh] flex flex-col justify-center items-center px-6 text-center relative">
-        <div class="reveal active">
-            <h1 class="main-title font-extrabold mb-6 tracking-tighter">
-                Lominka<span class="gradient-text text-white">.dev</span>
-            </h1>
-            <p class="text-base md:text-xl text-slate-400 max-w-xl mx-auto mb-10 leading-relaxed font-light">
-                Мені <span id="age" class="text-white font-semibold"></span>. Живу у <span class="text-white font-extrabold tracking-tight">Львові</span>. <br>
-                <span>Я програмую, збираю залізо та досліджую безпеку систем.</span>
-            </p>
-            <div class="flex flex-wrap justify-center gap-4">
-                <a href="https://github.com/lominka-c" target="_blank" class="glass px-8 py-3.5 rounded-2xl font-semibold hover:border-amber-500/50 transition-all flex items-center gap-3 text-sm text-white">
-                    <i class="fa-brands fa-github text-lg"></i> GitHub
-                </a>
-                <a href="https://t.me/lominkas" target="_blank" class="bg-amber-500 hover:bg-amber-600 text-black px-8 py-3.5 rounded-2xl font-bold transition-all flex items-center gap-3 text-sm shadow-lg shadow-amber-500/20">
-                    <i class="fa-brands fa-telegram text-lg !text-black"></i> Мій Блог
-                </a>
-            </div>
+    <header class="fixed top-0 w-full z-50 px-5 lg:px-8 py-3 flex justify-between items-center font-mono text-[10px] sm:text-xs bg-[#09090b]/90 backdrop-blur-md border-b border-white/5">
+        <div class="flex items-center gap-2 text-pink-400">
+            <i class='bx bxs-terminal'></i>
+            <span class="tracking-widest">lominka@dev-env</span>
         </div>
-    </section>
+        <div class="flex items-center gap-2 text-slate-500 tracking-widest">
+            <span class="uppercase">Lviv:</span>
+            <span id="clock" class="font-medium text-pink-200">00:00</span>
+        </div>
+    </header>
 
-    <section class="py-10 px-6 max-w-5xl mx-auto">
-        <div class="grid md:grid-cols-2 gap-12 md:gap-16">
-            
-            <div class="reveal space-y-12">
-                <div>
-                    <h2 class="text-xl font-bold mb-6 flex items-center gap-3 text-amber-500 uppercase tracking-widest">
-                        <i class="fa-solid fa-address-card"></i> Біографія
-                    </h2>
-                    <div class="space-y-5 text-slate-400 leading-relaxed font-light text-lg">
-                        <p>Вчуся на розробника. Мені цікаво, як працюють системи "під капотом", тому займаюся <b>Security Research</b>. При дослідженні безпеки доставок у Львові виявив вразливості та отримав доступ до системи.</p>
-                        <p>Використовую ШІ, щоб автоматизувати рутину та швидше писати код.</p>
+    <main class="max-w-6xl mx-auto px-5 lg:px-8 pt-20 sm:pt-28 pb-12">
+        
+        <section class="mb-24 reveal flex flex-col md:flex-row items-center md:items-start gap-10 lg:gap-14 w-full">
+            <div class="w-full md:w-[45%] flex flex-col items-center md:items-start text-center md:text-left shrink-0">
+                <div class="mb-6 inline-block">
+                    <div id="kaomoji" class="text-3xl font-bold text-pink-400 tracking-widest hover:text-pink-300 select-none" onclick="triggerCat(this)">
+                        (=^･ω･^=)
                     </div>
                 </div>
 
-                <div>
-                    <h2 class="text-xl font-bold mb-6 flex items-center gap-3 text-amber-500 uppercase tracking-widest">
-                        <i class="fa-solid fa-microchip"></i> Моє залізо
-                    </h2>
-                    <ul class="space-y-5 text-slate-300">
-                        <li class="flex items-center gap-4"><i class="fa-solid fa-laptop text-lg w-6"></i> <span>Lenovo LOQ <span class="sup-tech">Workstation</span></span></li>
-                        <li class="flex items-center gap-4"><i class="fa-solid fa-server text-lg w-6"></i> <span>Raspberry Pi 4B <span class="sup-tech">Server</span></span></li>
-                        <li class="flex items-center gap-4"><i class="fa-solid fa-cube text-lg w-6"></i> <span>Ender 3 V3 SE <span class="sup-tech">3D Printing</span></span></li>
-                        <li class="flex items-center gap-4"><i class="fa-solid fa-bolt text-lg w-6"></i> <span>ESP32 / Arduino / Датчики</span></li>
-                    </ul>
+                <div class="mb-2">
+                    <h1 class="text-[2.75rem] leading-tight sm:text-6xl font-extrabold tracking-tight flex items-center justify-center md:justify-start gap-2 w-full">
+                        <span class="text-white">Lominka</span><span class="pink-gradient-text">.</span>
+                    </h1>
+                    <div class="flex items-center justify-center md:justify-start gap-2 text-[10px] font-mono text-pink-400/60 uppercase tracking-widest mt-1">
+                        <span class="relative flex h-2 w-2">
+                            <span class="animate-slow-ping absolute inline-flex h-full w-full rounded-full bg-pink-400 opacity-75"></span>
+                            <span class="relative inline-flex rounded-full h-2 w-2 bg-pink-500"></span>
+                        </span>
+                        <span>Online in Telegram</span>
+                    </div>
+                </div>
+
+                <div class="text-[15px] sm:text-[17px] font-mono text-slate-400 mb-8 flex items-center justify-center md:justify-start w-full mt-6">
+                    <div class="typewriter-container">
+                        <span class="mr-3 text-pink-500">></span>
+                        <span class="mr-2">./run</span>
+                        <span id="typewriter" class="pink-gradient-text font-bold whitespace-nowrap"></span>
+                        <span class="blinking-cursor">_</span>
+                    </div>
+                </div>
+
+                <div class="relative text-slate-300 text-[14px] sm:text-[15px] leading-relaxed w-full p-5 rounded-2xl border border-pink-500/10 bg-pink-500/[0.02] mb-8 text-left">
+                    <p class="mb-2 font-mono text-[11px] text-pink-400/80">/* Human-readable bio */</p>
+                    <p>
+                        Привіт! Мені <span id="age-text" class="text-pink-300 font-bold"></span>, я розробник зі Львова. 
+                        Створюю надійний бекенд на <span class="text-white font-medium">Python</span> та кросплатформові додатки на <span class="text-white font-medium">Flutter</span>. Обожнюю копатися в залізі та коді.
+                    </p>
+                </div>
+
+                <div class="flex gap-4 w-full sm:w-auto font-mono text-sm font-bold mb-2">
+                    <a href="https://t.me/lominka_dev" target="_blank" class="cyber-card flex-1 px-6 py-3.5 flex justify-center items-center gap-2 text-pink-300 hover:bg-pink-500/10 transition-all border-pink-500/20">
+                        <i class='bx bxl-telegram text-xl'></i> Блог
+                    </a>
+                    <a href="https://github.com/lominka-c" target="_blank" class="cyber-card flex-1 px-6 py-3.5 flex justify-center items-center gap-2 text-slate-300 hover:text-white transition-colors">
+                        <i class='bx bxl-github text-xl'></i> GitHub
+                    </a>
                 </div>
             </div>
 
-            <div class="reveal space-y-6">
-                <h2 class="text-xl font-bold mb-6 flex items-center gap-3 text-amber-500 uppercase tracking-widest">
-                    <i class="fa-solid fa-terminal"></i> Технології
-                </h2>
+            <div class="w-full md:w-[55%] code-editor font-mono text-[11px] sm:text-[13px] lg:text-[14px] relative overflow-hidden mt-6 md:mt-0 reveal">
+                <div class="bg-[#09090b] px-4 py-3 border-b border-pink-500/10 flex items-center gap-2">
+                    <div class="w-2.5 h-2.5 rounded-full bg-slate-700"></div>
+                    <div class="w-2.5 h-2.5 rounded-full bg-slate-700"></div>
+                    <div class="w-2.5 h-2.5 rounded-full bg-slate-700"></div>
+                    <span class="ml-4 text-[10px] text-slate-500">profile.cpp</span>
+                </div>
                 
-                <div class="grid gap-5">
-                    <div class="glass p-6 rounded-3xl transition-all hover:bg-amber-500/[0.03]">
-                        <div class="flex items-center gap-4 mb-4">
-                            <i class="fa-brands fa-python text-3xl"></i>
-                            <span class="font-bold text-lg text-white">Python <span class="sup-tech">Backend</span></span>
-                        </div>
-                        <div class="flex flex-wrap gap-2">
-                            <span class="skill-tag">FastAPI</span> <span class="skill-tag">Aiogram</span> <span class="skill-tag">Pyrogram</span> <span class="skill-tag">OpenCV</span>
-                        </div>
+                <div class="relative flex" style="line-height: 1.6;">
+                    <div class="w-8 sm:w-10 shrink-0 bg-[#09090b]/50 border-r border-pink-500/10 flex flex-col items-end py-4 pr-2 text-slate-600 select-none text-[10px] sm:text-[12px]">
+                        <span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span><span>11</span>
                     </div>
+                    <div class="p-4 overflow-x-auto w-full">
+<div class="whitespace-pre text-[10px] sm:text-[12px] lg:text-[14px]"><span class="cpp-keyword">#include</span> <span class="cpp-string">&lt;developer.h&gt;</span>
 
-                    <div class="glass p-6 rounded-3xl transition-all hover:bg-amber-500/[0.03]">
-                        <div class="flex items-center gap-4 mb-4">
-                            <i class="fa-solid fa-mobile-screen text-3xl"></i>
-                            <span class="font-bold text-lg text-white">Dart & Flutter <span class="sup-tech">Apps</span></span>
-                        </div>
-                        <div class="flex flex-wrap gap-2">
-                            <span class="skill-tag">Mobile</span> <span class="skill-tag">Firebase Integration</span>
-                        </div>
-                    </div>
-
-                    <div class="glass p-6 rounded-3xl transition-all hover:bg-amber-500/[0.03]">
-                        <div class="flex items-center gap-4 mb-4">
-                            <i class="fa-solid fa-code text-3xl"></i>
-                            <span class="font-bold text-lg text-white">C++ & Hardware <span class="sup-tech">Embedded</span></span>
-                        </div>
-                        <div class="flex flex-wrap gap-2">
-                            <span class="skill-tag">Arduino IDE</span> <span class="skill-tag">ESP32 Dev</span>
-                        </div>
-                    </div>
-
-                    <div class="glass p-6 rounded-3xl transition-all hover:bg-amber-500/[0.03]">
-                        <div class="flex items-center gap-4 mb-4">
-                            <i class="fa-solid fa-screwdriver-wrench text-3xl"></i>
-                            <span class="font-bold text-lg text-white">Інструменти <span class="sup-tech">Tools</span></span>
-                        </div>
-                        <div class="flex flex-wrap gap-2">
-                            <span class="skill-tag">Git / GitHub</span> <span class="skill-tag">SQL</span> <span class="skill-tag">Linux / Bash</span>
-                        </div>
+<span class="cpp-keyword">const</span> <span class="cpp-type">Developer</span> lominka = {
+    .name = <span class="cpp-string">"Lominka"</span>,
+    .age = <span class="cpp-string" id="age-code"></span>,
+    .loc = <span class="cpp-string">"Lviv, UA"</span>,
+    .stack = {
+        <span class="cpp-string">"Python"</span>, <span class="cpp-string">"Flutter"</span>, <span class="cpp-string">"C++"</span>,
+        <span class="cpp-string">"SQL"</span>, <span class="cpp-string">"NoSQL"</span>, <span class="cpp-string">"Git"</span>, <span class="cpp-string">"Security"</span>
+    }
+};</div>
                     </div>
                 </div>
+            </div>
+        </section>
 
-                <div class="mt-6 p-6 glass rounded-3xl border-dashed border-amber-500/20">
-                    <h3 class="font-bold mb-3 flex items-center gap-2 text-white">
-                        <i class="fa-solid fa-comments"></i> На зв'язку
+        <section class="grid sm:grid-cols-2 gap-6 mb-16 reveal">
+            <div class="space-y-6">
+                <h2 class="font-mono text-xs text-pink-400/50 uppercase tracking-[0.2em] mb-4 flex items-center gap-2">
+                    <i class='bx bx-code-block'></i> src/modules
+                </h2>
+                <div class="cyber-card p-6 pt-8">
+                    <div class="flex items-center gap-4 mb-4 mt-2">
+                        <i class='bx bxl-python text-3xl text-pink-400'></i>
+                        <h3 class="font-bold text-lg text-slate-200">Backend & Bots</h3>
+                    </div>
+                    <p class="text-sm text-slate-400 mb-5">Швидкі мікросервіси, складні TG-боти та робота з БД.</p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="tech-pill">FastAPI</span><span class="tech-pill">Aiogram</span><span class="tech-pill">SQL</span>
+                    </div>
+                </div>
+                <div class="cyber-card p-6 pt-8">
+                    <div class="flex items-center gap-4 mb-4 mt-2">
+                        <i class='bx bxl-flutter text-3xl text-pink-400'></i>
+                        <h3 class="font-bold text-lg text-slate-200">Mobile Apps</h3>
+                    </div>
+                    <p class="text-sm text-slate-400 mb-5">Кросплатформові додатки під iOS та Android з чистим UI.</p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="tech-pill">Dart</span><span class="tech-pill">Flutter</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="space-y-6 sm:mt-10">
+                <h2 class="font-mono text-xs text-pink-400/50 uppercase tracking-[0.2em] mb-4 flex items-center gap-2">
+                    <i class='bx bx-chip'></i> bin/hardware
+                </h2>
+                <div class="cyber-card p-6 pt-8">
+                    <div class="flex items-center gap-4 mb-4 mt-2">
+                        <i class='bx bxs-microchip text-3xl text-pink-400'></i>
+                        <h3 class="font-bold text-lg text-slate-200">Tools & Sec</h3>
+                    </div>
+                    <p class="text-sm text-slate-400 mb-5">ESP32, розробка софту для мікроконтролерів та пентестинг.</p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="tech-pill">C++</span><span class="tech-pill">Security</span><span class="tech-pill">Embedded</span>
+                    </div>
+                </div>
+                <div class="cyber-card p-6 pt-8 border-pink-500/20 bg-pink-500/[0.02]">
+                    <h3 class="font-bold mb-3 mt-2 flex items-center gap-2 text-lg text-pink-300">
+                        <i class='bx bxs-joystick text-xl text-pink-400'></i> Offline Mode
                     </h3>
-                    <p class="text-slate-400 text-sm font-light leading-relaxed">Я постійно в Telegram — пишіть, завжди готовий обговорити технічні питання або безпеку систем.</p>
+                    <p class="text-sm text-slate-300 mb-5 leading-relaxed">
+                        Коли не пишу код, відпочиваю у VR (Quest 3), дивлюся аніме або просто відпочиваю від екранів.
+                    </p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="tech-pill text-pink-200">Anime</span>
+                        <span class="tech-pill text-pink-200">VR Gaming</span>
+                    </div>
                 </div>
             </div>
+        </section>
 
-        </div>
-    </section>
+    </main>
 
-    <footer class="py-12 text-center border-t border-stone-900/50">
-        <div class="reveal px-6 text-white text-white">
-            <div class="flex justify-center gap-10 mb-8">
-                <a href="https://github.com/lominka-c" target="_blank" class="text-stone-600 hover:text-amber-500 transition-all transform hover:scale-125"><i class="fa-brands fa-github text-2xl text-white"></i></a>
-                <a href="https://t.me/lominkas" target="_blank" class="text-stone-600 hover:text-amber-500 transition-all transform hover:scale-125"><i class="fa-brands fa-telegram text-2xl text-white"></i></a>
-                <a href="mailto:lominka.company@gmail.com" class="text-stone-600 hover:text-amber-500 transition-all transform hover:scale-125"><i class="fa-solid fa-envelope text-2xl text-white"></i></a>
-            </div>
-            <p class="text-[9px] opacity-40 uppercase tracking-[0.5em] text-white">© <span id="year"></span> Lominka • Lviv, Ukraine</p>
-            <p class="text-[6px] opacity-10 mt-6 tracking-widest font-light italic text-white">Сайт згенеровано за допомогою ШІ</p>
-        </div>
+    <footer class="py-8 text-center font-mono text-[10px] text-slate-600 border-t border-white/5 reveal">
+        <p class="mb-2">sys.exit(0) // © <span id="year"></span> Lominka</p>
+        <p id="robot-hint" class="opacity-20 hover:opacity-100 transition-opacity cursor-help select-none" onclick="triggerRobot(this)">
+            ( А може я робот? )
+        </p>
     </footer>
+
+    <div id="achievement" class="toast-msg toast-bottom">
+        <i class='bx bxs-trophy text-yellow-400 text-xl'></i> 
+        <div>
+            <div class="font-bold text-pink-400 uppercase text-[10px] tracking-widest">Achievement Unlocked</div>
+            <div class="text-white">The Turing Test Passed</div>
+        </div>
+    </div>
+
+    <div id="toast-cat" class="toast-msg toast-top-right">
+        <i class='bx bxs-cat text-pink-400 text-xl'></i> 
+        <div class="flex flex-col">
+            <span class="font-bold text-pink-400 text-[10px] tracking-widest uppercase">System Access</span>
+            <span class="text-pink-100">Meow! Privileges granted.</span>
+        </div>
+    </div>
 
     <script>
         const observer = new IntersectionObserver((entries) => {
@@ -193,12 +298,68 @@
         }, { threshold: 0.1 });
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-        const bD = 7, bM = 1, bY = 2008;
         const n = new Date();
-        let a = n.getFullYear() - bY;
-        if (n.getMonth() < bM || (n.getMonth() === bM && n.getDate() < bD)) a--;
-        document.getElementById('age').innerText = a + ' років';
+        let a = n.getFullYear() - 2008;
+        if (n.getMonth() < 1 || (n.getMonth() === 1 && n.getDate() < 7)) a--;
+        
+        document.getElementById('age-text').innerText = a + (a % 10 === 1 ? " рік" : (a % 10 >= 2 && a % 10 <= 4 ? " роки" : " років"));
+        document.getElementById('age-code').innerText = a;
         document.getElementById('year').innerText = n.getFullYear();
+
+        setInterval(() => {
+            document.getElementById('clock').innerText = new Date().toLocaleTimeString('uk-UA', {timeZone: 'Europe/Kyiv', hour:'2-digit', minute:'2-digit'});
+        }, 1000);
+
+        const words = ["backend_api.py", "tg_bots.py", "flutter_app.dart", "security.sh"];
+        let i = 0, j = 0, isDeleting = false, isWaiting = false;
+        const typeTarget = document.getElementById('typewriter');
+
+        function type() {
+            if (isWaiting) return; 
+            typeTarget.innerText = words[i].substring(0, j);
+            if (!isDeleting) {
+                if (j < words[i].length) { j++; setTimeout(type, 80); } 
+                else { isWaiting = true; setTimeout(() => { isWaiting = false; isDeleting = true; type(); }, 2000); }
+            } else {
+                if (j > 0) { j--; setTimeout(type, 40); } 
+                else { isDeleting = false; i = (i + 1) % words.length; setTimeout(type, 500); }
+            }
+        }
+        type();
+
+        let catClicks = 0;
+        function triggerCat(el) {
+            catClicks++;
+            el.style.transform = `scale(${1 + catClicks * 0.1}) rotate(${catClicks * 2}deg)`;
+            if (catClicks === 5) {
+                showToast('toast-cat');
+                catClicks = 0;
+                setTimeout(() => { el.style.transform = `scale(1) rotate(0deg)`; }, 300);
+            }
+        }
+
+        let robotClicks = 0;
+        function triggerRobot(el) {
+            robotClicks++;
+            el.classList.add('poked');
+            el.style.transform = `scale(${1 + robotClicks * 0.15})`;
+            
+            if (robotClicks === 5) {
+                el.innerText = "( [ERROR]: HUMAN_EMULATION_FAILED )";
+                showToast('achievement');
+                robotClicks = 0;
+                setTimeout(() => { 
+                    el.style.transform = `scale(1)`;
+                    el.classList.remove('poked');
+                }, 3000);
+            }
+        }
+
+        function showToast(id) {
+            const t = document.getElementById(id);
+            t.classList.add('show');
+            setTimeout(() => { t.classList.remove('show'); }, 4000);
+        }
     </script>
 </body>
 </html>
