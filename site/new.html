@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>lominka · dev — бекенд, залізо, безпека</title>
+<meta name="description" content="lominka (Ломінка) — бекенд на Python, мобілки на Flutter, embedded на C++ та security audit. Проєкти, залізо й контакти.">
+<meta name="author" content="lominka">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#fbf5ff" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#151021" media="(prefers-color-scheme: dark)">
+<link rel="canonical" href="https://lominka.dev/site/new.html">
+<meta name="robots" content="noindex">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../avatar.jpg">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="lominka · dev">
+<meta property="og:locale" content="uk_UA">
+<meta property="og:url" content="https://lominka.dev/site/new.html">
+<meta property="og:title" content="lominka · dev">
+<meta property="og:description" content="Бекенд, залізо й трохи хаосу. Python, Dart, C++, security.">
+<meta property="og:image" content="https://lominka.dev/avatar.jpg">
+<meta name="twitter:card" content="summary">
+
+<script type="application/ld+json">
+{ "@context": "https://schema.org", "@type": "Person", "name": "lominka", "alternateName": "Ломінка",
+  "url": "https://lominka.dev/", "image": "https://lominka.dev/avatar.jpg",
+  "jobTitle": "Backend / Embedded developer", "address": { "@type": "PostalAddress", "addressLocality": "Львів", "addressCountry": "UA" },
+  "knowsAbout": ["Python", "FastAPI", "Flutter", "Dart", "C++", "ESP32", "PostgreSQL", "Security"],
+  "sameAs": ["https://github.com/lominka-c", "https://t.me/lominka_dev"] }
+</script>
+
+<!-- тема до рендеру, щоб не блимало -->
+<script>try{var t=localStorage.getItem('theme');if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;800&family=Manrope:wght@400;600;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="preload" as="image" href="avatar.webp" type="image/webp">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<a class="skip" href="#main">до вмісту</a>
+
+<div class="top" id="top">
+  <div class="wrap topin">
+    <a class="pill" id="prompt" href="#page" aria-label="на початок"></a>
+    <nav class="nav" id="nav" aria-label="Розділи"></nav>
+    <div class="tools">
+      <span id="clock" aria-label="Місцевий час"></span>
+      <button class="ibtn" id="termBtn" type="button" title="термінал ( / )" aria-label="Відкрити термінал">&gt;_</button>
+      <button class="ibtn" id="themeBtn" type="button" title="тема" aria-label="Перемкнути тему"></button>
+    </div>
+  </div>
+</div>
+
+<div class="wrap" id="page">
+  <header class="hero">
+    <div>
+      <h1 id="name">lominka</h1>
+      <p class="typing" id="typing" aria-hidden="true"></p>
+      <p class="bio" id="bio"></p>
+      <div class="links" id="links"></div>
+      <p class="hint" id="hint"></p>
+    </div>
+    <div class="photo" id="photo" title="psst..">
+      <picture><source id="avatarWebp" type="image/webp"><img id="avatar" alt="Аватар lominka" width="250" height="250" decoding="async" fetchpriority="high"></picture>
+      <span class="tag">// online</span>
+    </div>
+  </header>
+
+  <main id="main" tabindex="-1">
+    <section id="skills-s" aria-labelledby="h-skills"><h2 id="h-skills">Скіли</h2><div class="grid" id="skills"></div></section>
+    <section id="lab-s" aria-labelledby="h-lab">
+      <h2 id="h-lab">Залізо</h2>
+      <div class="grid"><div class="card wide" id="labMain"></div></div>
+      <div class="two"><div class="card"><h3>Інвентар</h3><div class="chips" id="inv"></div></div><div class="card"><h3>Девайси</h3><dl id="dev"></dl></div></div>
+    </section>
+    <section id="projects-s" aria-labelledby="h-proj"><h2 id="h-proj">Проєкти</h2><div class="filters" id="filters" role="toolbar" aria-label="Фільтр за статусом"></div><div class="grid" id="projects"></div></section>
+    <section id="hobbies-s" aria-labelledby="h-hob"><h2 id="h-hob">Хобі</h2><div class="hobbies" id="hobbies"></div></section>
+    <section id="contact-s" aria-labelledby="h-contact" class="cta">
+      <h2 id="h-contact">Звʼязок</h2>
+      <div class="card wide ctacard"><p id="ctaText"></p><div class="links" id="links2"></div></div>
+    </section>
+  </main>
+
+  <footer>
+    <span>© <span id="year"></span> <span id="fname"></span> · <span id="ftext"></span></span>
+    <button id="egg" type="button">[ а може я просто машина? ]</button>
+  </footer>
+</div>
+
+<noscript><div class="wrap nojs"><p>Сайт рендериться через JS. Контакти: <a href="https://t.me/lominka_dev">telegram</a> · <a href="https://github.com/lominka-c">github</a> · <a href="mailto:me@lominka.dev">me@lominka.dev</a></p></div></noscript>
+
+<dialog id="term" aria-label="Термінал">
+  <div class="tbar"><i></i><i></i><i></i><span id="termTitle"></span><button type="button" id="termClose" aria-label="Закрити">✕</button></div>
+  <div class="tout" id="tout" aria-live="polite"></div>
+  <form class="tin" id="tform" autocomplete="off"><label for="tinput" id="tps"></label><input id="tinput" spellcheck="false" autocapitalize="off" enterkeyhint="go"></form>
+</dialog>
+
+<div id="toast" role="status" aria-live="polite"></div>
+
+<script src="config.js"></script>
+<script src="main.js"></script>
+</body>
+</html>
